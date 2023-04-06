@@ -1,16 +1,27 @@
-# This is a sample Python script.
-
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+import requests
+from bs4 import BeautifulSoup
+import lxml
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def scrapeUdemy(tag):
+    url = f'https://www.udemy.com/courses/search/?src=ukw&q={tag}'
+    response = requests.get(url)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    h3s = []
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # title = soup.select('.ud-heading-md')[0].getText().strip()
+    # print(soup.title)
+
+    a = soup.find('a', attrs={'class': 'class'})
+
+    for tags in soup.find_all('a'):
+        # print(tags.get('href'))
+        h3s.append(tags.get('href'))
+
+    return response.text
+
+
+courseTag = input("Search for Udemy courses?")
+print(scrapeUdemy(courseTag))
