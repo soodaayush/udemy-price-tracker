@@ -1,27 +1,12 @@
-import requests
-from bs4 import BeautifulSoup
-import lxml
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 
+url = 'https://www.udemy.com/courses/search/?src=ukw&q=Python'
 
-def scrapeUdemy(tag):
-    url = f'https://www.udemy.com/courses/search/?src=ukw&q={tag}'
-    response = requests.get(url)
+driver = webdriver.Chrome(service=ChromeService(
+    ChromeDriverManager().install()))
 
-    h3s = []
+driver.get(url)
 
-    soup = BeautifulSoup(response.text, 'html.parser')
-
-    # title = soup.select('.ud-heading-md')[0].getText().strip()
-    # print(soup.title)
-
-    a = soup.find('a', attrs={'class': 'class'})
-
-    for tags in soup.find_all('a'):
-        # print(tags.get('href'))
-        h3s.append(tags.get('href'))
-
-    return response.text
-
-
-courseTag = input("Search for Udemy courses?")
-print(scrapeUdemy(courseTag))
+print(driver.page_source)
