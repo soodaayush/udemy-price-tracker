@@ -1,12 +1,23 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
+import asyncio
+from pyppeteer import launch
 
-url = 'https://www.udemy.com/courses/search/?src=ukw&q=Python'
 
-driver = webdriver.Chrome(service=ChromeService(
-    ChromeDriverManager().install()))
+async def main():
+    browserObj = await launch({"headless": False})
+    url = await browserObj.newPage()
 
-driver.get(url)
+    await url.goto('https://www.udemy.com/courses/search/?src=ukw&q=Python')
+    await url.waitFor(10000)
 
-print(driver.page_source)
+    prices = await url.querySelectorAll("span")
+
+    for price in prices:
+        price = await price.getProperty("textContent")
+        print(await price.jsonValue())
+
+    html = await url.content()
+    await browserObj.close()
+    return prices
+
+
+print(asyncio.get_event_loop().run_until_complete(main()))
