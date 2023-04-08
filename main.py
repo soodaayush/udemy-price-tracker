@@ -6,18 +6,21 @@ async def main():
     browserObj = await launch({"headless": False})
     url = await browserObj.newPage()
 
-    await url.goto('https://www.udemy.com/courses/search/?src=ukw&q=Python')
-    await url.waitFor(10000)
+    await url.goto('http://127.0.0.1:5500/index.html')
+    await url.waitFor(5000)
 
-    prices = await url.querySelectorAll("span")
+    arr = []
+
+    prices = await url.querySelectorAll("div .ud-sr-only > span")
 
     for price in prices:
         price = await price.getProperty("textContent")
+        print(price)
+
         print(await price.jsonValue())
 
-    html = await url.content()
+    # html = await url.content()
     await browserObj.close()
-    return prices
 
 
 print(asyncio.get_event_loop().run_until_complete(main()))
