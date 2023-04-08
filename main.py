@@ -1,4 +1,5 @@
 import asyncio
+import json
 from pyppeteer import launch
 
 
@@ -15,9 +16,12 @@ async def main():
 
     for price in prices:
         price = await price.getProperty("textContent")
-        print(price)
 
+        json_object = json.dumps(await price.jsonValue(), indent=0)
         print(await price.jsonValue())
+
+        with open("sample.json", "w") as outfile:
+            outfile.write(json_object)
 
     # html = await url.content()
     await browserObj.close()
