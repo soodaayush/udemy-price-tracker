@@ -25,16 +25,31 @@ async def main():
     await url.waitFor(3000)
 
     arr = []
+    titles = []
 
     coursesInfo = await url.querySelectorAll("div .ud-sr-only > span")
     courseTitles = await url.querySelectorAll("div .course-card--has-price-text--1c0ze > h3 > a")
 
     courseObj = {}
 
+    for courseTitle in courseTitles:
+        courseTitle = await courseTitle.getProperty("textContent")
+
+        if "<strong>" not in await courseTitle.jsonValue() and ":" not in await courseTitle.jsonValue():
+            titles.append(await courseTitle.jsonValue())
+
+        print(await courseTitle.jsonValue())
+
     for courseInfo in coursesInfo:
+        i = 0
+
         courseInfo = await courseInfo.getProperty("textContent")
 
-        print(await courseInfo.jsonValue())
+        # print(await courseInfo.jsonValue())
+
+        title = titles[i]
+
+        courseObj.update(title=titles[i])
 
         if "Original" in await courseInfo.jsonValue():
             courseObj.update(originalPrice=await courseInfo.jsonValue())
@@ -44,13 +59,9 @@ async def main():
         if "originalPrice" in courseObj and "currentPrice" in courseObj:
             arr.append(courseObj)
             courseObj = {}
+            i = i + 1
 
     print(arr)
-
-    # for courseTitle in courseTitles:
-    #     courseTitle = await courseTitle.getProperty("textContent")
-    #
-    #     print(await courseTitle.jsonValue())
 
     # html = await url.content()
     await browserObj.close()
