@@ -26,39 +26,31 @@ async def main():
 
     arr = []
 
-    courses = await url.querySelectorAll(".course-list--container--FuG0T")
-
-    print(courses)
-    #
-    # for course in courses:
-    #     element = await course.querySelector("h3")
-    #     print(await element.jsonValue())
-
     coursesInfo = await url.querySelectorAll("div .ud-sr-only > span")
     courseTitles = await url.querySelectorAll("div .course-card--has-price-text--1c0ze > h3 > a")
 
-    # for courseTitle in courseTitles:
-    #     courseTitle = await courseTitle.getProperty("textContent")
-    #
-    #     print(await courseTitle.jsonValue())
-
-    coursesObj = {}
+    courseObj = {}
 
     for courseInfo in coursesInfo:
         courseInfo = await courseInfo.getProperty("textContent")
 
-        courseObj = {}
-
-        # print(type(await courseInfo.jsonValue()))
+        print(await courseInfo.jsonValue())
 
         if "Original" in await courseInfo.jsonValue():
             courseObj.update(originalPrice=await courseInfo.jsonValue())
         elif "Current" in await courseInfo.jsonValue():
             courseObj.update(currentPrice=await courseInfo.jsonValue())
 
-        arr.append(courseObj)
+        if "originalPrice" in courseObj and "currentPrice" in courseObj:
+            arr.append(courseObj)
+            courseObj = {}
 
     print(arr)
+
+    # for courseTitle in courseTitles:
+    #     courseTitle = await courseTitle.getProperty("textContent")
+    #
+    #     print(await courseTitle.jsonValue())
 
     # html = await url.content()
     await browserObj.close()
