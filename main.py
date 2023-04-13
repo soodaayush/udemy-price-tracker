@@ -7,16 +7,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-# account_sid = os.getenv("TWILIO_ACCOUNT_ID")
-# auth_token = os.getenv("TWILIO_AUTH_TOKEN")
-# client = Client(account_sid, auth_token)
-# message = client.messages.create(
-#     body=f"{arr}",
-#     from_=os.getenv("TWILIO_PHONE_NUMBER"),
-#     to=os.getenv("RECIPIENT_PHONE_NUMBER")
-# )
-
-
 async def main():
     browserObj = await launch({"headless": False})
     url = await browserObj.newPage()
@@ -27,6 +17,7 @@ async def main():
     i = 0
     courses = []
     links = []
+    titles = []
     courseObj = {}
 
     coursesInfo = await url.querySelectorAll("div .ud-sr-only > span")
@@ -36,28 +27,37 @@ async def main():
     for courseTitle in courseTitles:
         courseTitle = await courseTitle.getProperty("textContent")
 
-        stringified = str(await courseTitle.jsonValue())
+        title = ""
 
-        stringified = stringified.splitlines()
+        stringTitle = str(await courseTitle.jsonValue())
+        stringTitle = stringTitle.splitlines()
 
-        print(stringified)
+        if stringTitle[2] != "":
+            title = stringTitle[1].strip() + " " + stringTitle[2].strip()
+        else:
+            title = stringTitle[1].strip()
 
-        print(f"{await courseTitle.jsonValue()} End line")
+        titles.append(title)
 
     for courseLink in courseLinks:
         courseLink = await courseLink.getProperty("href")
 
-        links.append(await courseLink.jsonValue())
+        splitLink = str(await courseLink.jsonValue()).split("/course/")
+
+        links.append(f"https://www.udemy.com/course/{splitLink[1]}")
 
     for courseInfo in coursesInfo:
         courseInfo = await courseInfo.getProperty("textContent")
 
+        courseObj.update(title=titles[i])
         courseObj.update(url=links[i])
 
         if "Original" in await courseInfo.jsonValue():
-            courseObj.update(originalPrice=await courseInfo.jsonValue())
+            split = str(await courseInfo.jsonValue()).split(": ")
+            courseObj.update(originalPrice=split[1])
         elif "Current" in await courseInfo.jsonValue():
-            courseObj.update(currentPrice=await courseInfo.jsonValue())
+            split = str(await courseInfo.jsonValue()).split(": ")
+            courseObj.update(currentPrice=split[1])
 
         if "originalPrice" in courseObj and "currentPrice" in courseObj:
             courses.append(courseObj)
@@ -65,6 +65,18 @@ async def main():
             i = i + 1
 
     print(courses)
+
+    for course in courses:
+        # account_sid = os.getenv("TWILIO_ACCOUNT_ID")
+        # auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+        # client = Client(account_sid, auth_token)
+        # message = client.messages.create(
+        #     body=f"\nTitle: {course.get('title')}\n Link: {course.get('url')}\n Current Price: {course.get('currentPrice')}\n Original Price: {course.get('originalPrice')}",
+        #     from_=os.getenv("TWILIO_PHONE_NUMBER"),
+        #     to=os.getenv("RECIPIENT_PHONE_NUMBER")
+        # )
+
+        print(course.get("title"))
 
     # html = await url.content()
     await browserObj.close()
