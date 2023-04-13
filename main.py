@@ -64,21 +64,20 @@ async def main():
             courseObj = {}
             i = i + 1
 
-    print(courses)
+    textMessage = ""
 
-    for course in courses:
-        # account_sid = os.getenv("TWILIO_ACCOUNT_ID")
-        # auth_token = os.getenv("TWILIO_AUTH_TOKEN")
-        # client = Client(account_sid, auth_token)
-        # message = client.messages.create(
-        #     body=f"\nTitle: {course.get('title')}\n Link: {course.get('url')}\n Current Price: {course.get('currentPrice')}\n Original Price: {course.get('originalPrice')}",
-        #     from_=os.getenv("TWILIO_PHONE_NUMBER"),
-        #     to=os.getenv("RECIPIENT_PHONE_NUMBER")
-        # )
+    for course in courses[:5]:
+        textMessage += f"\n Title: {course.get('title')}\n Link: {course.get('url')}\n Current Price: {course.get('currentPrice')}\n Original Price: {course.get('originalPrice')}\n"
 
-        print(course.get("title"))
+    account_sid = os.getenv("TWILIO_ACCOUNT_ID")
+    auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+    client = Client(account_sid, auth_token)
+    message = client.messages.create(
+        body=f"{textMessage}",
+        from_=os.getenv("TWILIO_PHONE_NUMBER"),
+        to=os.getenv("RECIPIENT_PHONE_NUMBER")
+    )
 
-    # html = await url.content()
     await browserObj.close()
 
 
