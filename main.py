@@ -3,6 +3,9 @@ import nest_asyncio
 
 nest_asyncio.apply()
 
+import os
+from twilio.rest import Client
+
 from pyppeteer import launch
 from dotenv import load_dotenv
 
