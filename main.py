@@ -22,22 +22,14 @@ async def main():
 
     coursesInfo = await url.querySelectorAll("div .ud-sr-only > span")
     courseLinks = await url.querySelectorAll("div .course-card--has-price-text--1c0ze > h3 > a")
-    courseTitles = await url.querySelectorAll("div .course-card--has-price-text--1c0ze > h3")
+    courseTitles = await url.querySelectorAll("div .course-card--has-price-text--1c0ze > h3 > a")
 
     for courseTitle in courseTitles:
-        courseTitle = await courseTitle.getProperty("textContent")
+        courseTitle = await courseTitle.getProperty("innerHTML")
 
-        title = ""
+        stringTitle = str(await courseTitle.jsonValue()).split("<div")
 
-        stringTitle = str(await courseTitle.jsonValue())
-        stringTitle = stringTitle.splitlines()
-
-        if stringTitle[2] != "":
-            title = stringTitle[1].strip() + " " + stringTitle[2].strip()
-        else:
-            title = stringTitle[1].strip()
-
-        titles.append(title)
+        titles.append(stringTitle[0])
 
     for courseLink in courseLinks:
         courseLink = await courseLink.getProperty("href")
@@ -69,14 +61,14 @@ async def main():
     for course in courses[:5]:
         textMessage += f"\n Title: {course.get('title')}\n Link: {course.get('url')}\n Current Price: {course.get('currentPrice')}\n Original Price: {course.get('originalPrice')}\n"
 
-    account_sid = os.getenv("TWILIO_ACCOUNT_ID")
-    auth_token = os.getenv("TWILIO_AUTH_TOKEN")
-    client = Client(account_sid, auth_token)
-    message = client.messages.create(
-        body=f"{textMessage}",
-        from_=os.getenv("TWILIO_PHONE_NUMBER"),
-        to=os.getenv("RECIPIENT_PHONE_NUMBER")
-    )
+        # account_sid = os.getenv("TWILIO_ACCOUNT_ID")
+        # auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+        # client = Client(account_sid, auth_token)
+        # message = client.messages.create(
+        #     body=f"{textMessage}",
+        #     from_=os.getenv("TWILIO_PHONE_NUMBER"),
+        #     to=os.getenv("RECIPIENT_PHONE_NUMBER")
+        # )
 
     await browserObj.close()
 
