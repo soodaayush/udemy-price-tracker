@@ -8,7 +8,11 @@ I wanted to solve a problem about fetching Udemy prices without going to their w
 
 ## Challenges
 
-Since I was new to web scraping and messaging, I struggled with implementing those.
+Finding what specific elements to target when scraping Udemy's website.
+
+## Lessons Learned
+
+I learned the fundamentals of web scraping using Pyppeteer. I learned how to use Twilio's text messasing service.
 
 ## The Service
 
