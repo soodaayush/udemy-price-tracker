@@ -4,16 +4,16 @@
 
 ## Inspiration
 
-I wanted to solve a problem about fetching Udemy prices without going to their website itself. That is when I made this service.
+I wanted to solve the problem of fetching Udemy prices without having to visit their website. That's when I created this service.
 
 ## Challenges
 
-Finding what specific elements to target when scraping Udemy's website.
+Identifying the specific elements to target when scraping Udemy's website.
 
 ## Lessons Learned
 
-I learned the fundamentals of web scraping using Pyppeteer. I learned how to use Twilio's text messasing service.
+I learned the fundamentals of web scraping using Pyppeteer and how to use Twilio's text messaging service.
 
 ## The Service
 
-This Python program uses the Pyppeteer package to scrape prices off of Udemy's website, and sends a message using Twilio to a phone number containing the prices and their course descriptions.
+This Python program uses the Pyppeteer package to scrape prices from Udemy's website and sends a message using Twilio to a phone number containing the prices and course descriptions.
