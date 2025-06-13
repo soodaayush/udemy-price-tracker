@@ -4,16 +4,21 @@
 
 ## Inspiration
 
-I wanted to solve the problem of fetching Udemy prices without having to visit their website. That's when I created this service.
+While browsing Udemy, I realized that there wasn't an easy way to monitor course prices without visiting the website manually. This led me to build a solution that could automate this process and notify me when course prices change.
 
 ## Challenges
 
-Identifying the specific elements to target when scraping Udemy's website.
+- Dealing with anti-bot detection and browser delays
+- Parsing complex DOM structures to locate accurate price and title elements
 
 ## Lessons Learned
 
-I learned the fundamentals of web scraping using Pyppeteer and how to use Twilio's text messaging service.
+- How to automate browsers using Pyppeteer
+- Fundamentals of web scraping, including DOM traversal and handling dynamic content
+- How to send SMS messages using the Twilio API
 
 ## The Service
 
-This Python program uses the Pyppeteer package to scrape prices from Udemy's website and sends a message using Twilio to a phone number containing the prices and course descriptions.
+1. The program launches a headless browser using Pyppeteer.
+2. It visits the Udemy course page(s) and scrapes course titles and prices.
+3. The data is formatted and sent as an SMS using Twilio.
