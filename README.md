@@ -20,5 +20,5 @@ While browsing Udemy, I realized that there wasn't an easy way to monitor course
 ## The Service
 
 1. The program launches a headless browser using Pyppeteer.
-2. It visits the Udemy course page(s) and scrapes course titles and prices.
-3. The data is formatted and sent as an SMS using Twilio.
+2. It visits the Udemy course page(s) and scrapes course titles and prices based on a specified course topic.
+3. The data is formatted (Course Title, Course Price, etc.) and sent as an SMS using Twilio.
